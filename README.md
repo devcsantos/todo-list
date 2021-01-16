@@ -1,0 +1,2 @@
+# Todo-list
+A project made while following http://theodinproject.com . The goal of this project is to create a todo-list using the knowledge gained from undergoing the course. The main concepts that are used in making this project are ES6 Modules, OOP principle and design patterns.

@@ -1,0 +1,17 @@
+{
+  "name": "todo-list",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "build": "webpack"
+  },
+  "author": "Christian",
+  "license": "ISC",
+  "keywords": [],
+  "description": "",
+  "devDependencies": {
+    "webpack": "^5.15.0",
+    "webpack-cli": "^4.3.1"
+  }
+}
