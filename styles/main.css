@@ -163,6 +163,12 @@ body {
 SVG Icons - svgicons.sparkk.fr
 ----- */
 
+svg {
+  pointer-events: all;
+  width: 20px;
+  height: 20px;
+}
+
 .svg-icon {
   width: 1.5em;
   display: inline-block;
@@ -174,10 +180,16 @@ SVG Icons - svgicons.sparkk.fr
 
 .svg-icon path,
 .svg-icon polygon,
-.svg-icon rect {
+.svg-icon rect
+{
   fill: black;
   width: 100%;
-  height: auto;
+  height: 100%;
+  pointer-events: none;
+}
+
+.svg-icon rect {
+  fill: none;
 }
 
 svg:hover path{
