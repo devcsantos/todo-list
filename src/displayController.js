@@ -11,6 +11,7 @@ const createProjectButton = (id) => {
   projectButton.setAttribute('id', id);
   projectButton.innerText = id;
   projectButton.classList.add('project-button');
+  projectButton.addEventListener('click', (loadProject));
   return projectButton;
 }
 
@@ -35,7 +36,7 @@ const createNewProjectButton = () => {
     projectsElement.appendChild(createProjectButton(project.getTitle()));
     newProjectButton.remove();
     createNewProjectButton();
-  })
+  }, true)
   
   newProjectButton.addEventListener('blur', (e) => {
     let textEdit = newProjectButton.firstChild;
@@ -55,19 +56,22 @@ const createNewProjectButton = () => {
 }
 
 export default function initializeDisplay() {
-  loadProject('test');
   createNewProjectButton(); // appends a new project button at the end
-};
+}
 
-const loadProject = (title) => {
-  let project = createProject('test project', 'test project description');
-
+const loadProject = (e) => {
+  let project = projects[
+    projects.findIndex(
+      (project) => { return project.getTitle() == e.target.id}
+    )
+  ];
+  console.log(project);
   let projectTitle = document.getElementById('project-title');
   let projectDescription = document.getElementById('project-desc');
   projectTitle.innerText = project.getTitle();
   projectDescription.innerText = project.getDescription();
 
-  createNewTodoButton();
+  //createNewTodoButton();
 }
 
 const createTodoButton = (id) => {
