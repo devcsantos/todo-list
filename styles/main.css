@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@500&display=swap');
+
+:root {
+  --nav-bar-color: #000000;
+  --nav-bar-color-hover: #444444;
+  --nav-bar-text-color: #FFFFFF;
+  --content-section-color: #FFFFFF;
+  --content-section-text-color: #000000;
+  font-family: 'Dosis';
+}
+
+*, *:after, *:before {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+*:hover {
+  cursor: pointer;
+}
+
+body {
+  display: flex;
+  flex-direction: row;
+}
+
+#nav-bar {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  background-color: var(--nav-bar-color);
+  color: var(--nav-bar-text-color);
+}
+
+.nav-bar-button {
+  padding: 20px;
+  border: 2px solid red;
+  transition: background-color 0.4s ease-out;
+}
+
+.nav-bar-button:hover {
+  background-color: var(--nav-bar-color-hover);
+}
+
+#projects-bar {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  background-color: var(--nav-bar-color);
+  color: var(--nav-bar-text-color);
+}
+
+#projects-bar a {
+  border: 2px solid red;
+}
+
+.project-button {
+
+  transition: background-color 0.4s ease-out;
+}
+
+.project-button:hover {
+  background-color: blue;
+}
+
+#new-project-button {
+
+}
+
+#todo-section {
+  
+}
