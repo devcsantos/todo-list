@@ -1,11 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@500&display=swap');
 
 :root {
-  --nav-bar-color: #000000;
-  --nav-bar-color-hover: #444444;
-  --nav-bar-text-color: #FFFFFF;
-  --content-section-color: #FFFFFF;
-  --content-section-text-color: #000000;
+  --nav-bar-color: rgba(0, 0, 0, 0.1);
+  --nav-bar-color-hover:rgba(0, 0, 0, 0.15);
+  --nav-bar-text-color: rgba(0, 0, 0, 1)
+  --content-section-color: rgba(255, 255, 255, 1);
+  --content-section-text-color: rgba(0, 0, 0, 0.5);
+  --todo-button-color: rgba(0, 0, 0, 0.7);
+  --todo-button-color-hover: rgba(0, 0, 0, 0.5);
   font-family: 'Dosis';
 }
 
@@ -34,9 +36,15 @@ body {
   color: var(--nav-bar-text-color);
 }
 
+#nav-bar h3 {
+  margin-top: 50px;
+  padding: 20px;
+}
+
 .nav-bar-button {
   padding: 20px;
-  border: 2px solid red;
+  min-height: 60px;
+  max-height: 60px;
   transition: background-color 0.4s ease-out;
 }
 
@@ -48,25 +56,32 @@ body {
   display: flex;
   flex-direction: column;
   width: 400px;
-  background-color: var(--nav-bar-color);
   color: var(--nav-bar-text-color);
 }
 
-#projects-bar a {
-  border: 2px solid red;
-}
-
 .project-button {
-
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  min-height: 60px;
+  max-height: 60px;
   transition: background-color 0.4s ease-out;
 }
 
 .project-button:hover {
-  background-color: blue;
+  background-color: var(--nav-bar-color-hover);
 }
 
-#new-project-button {
+.project-button input {
+  border-radius: 5px;
+  line-height: 25px;
+  font-family: 'Dosis';
+  width: 100%;
+}
 
+.project-button input:focus {
+  box-shadow: 0 0 5px var(--nav-bar-color-hover);
+  border: 1px solid var(--nav-bar-color-hover);
 }
 
 #project-section {
@@ -89,17 +104,34 @@ body {
 
 #new-todo-button {
 
-  border: 2px solid black;
 }
 
 .todo-button {
-  background-color: black;
+  background-color: var(--todo-button-color);
   color: white;
+  border: 2px solid black;
+  border-radius: 5px;
   transition: background-color 0.4s ease-out;
+  margin: 5px;
+  padding: 5px;
 }
 
 .todo-button:hover {
-  background-color: white;
+  background-color: var(--todo-button-color-hover);
+}
+
+.todo-button input {
+  border-radius: 5px;
+  line-height: 25px;
+  font-family: 'Dosis';
+  width: 100%;
+  outline: none;
+}
+
+.todo-button input:focus {
+  box-shadow: 0 0 5px var(--nav-bar-color-hover);
+  border: 1px solid var(--nav-bar-color-hover);
+  outline: none;
 }
 
 .modal {
@@ -125,4 +157,34 @@ body {
   width: 100%;
   height: 100%;
   background-color: rgba(0,0,0,0.1);
+}
+
+/* -----
+SVG Icons - svgicons.sparkk.fr
+----- */
+
+.svg-icon {
+  width: 1.5em;
+  display: inline-block;
+}
+
+.svg-icon-delete {
+  margin-left: auto;
+}
+
+.svg-icon path,
+.svg-icon polygon,
+.svg-icon rect {
+  fill: black;
+  width: 100%;
+  height: auto;
+}
+
+svg:hover path{
+  fill: #2375FF;
+}
+
+.svg-icon circle {
+  stroke: #4691f6;
+  stroke-width: 1;
 }
