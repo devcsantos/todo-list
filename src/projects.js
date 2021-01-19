@@ -13,7 +13,7 @@ const projectFactory = (title, description = 'New description') => {
     let myTodos = [];
 
     for(let todo of todosArray) {
-      if(todo.getProject() == getTitle()) {
+      if(todo.getProject().getTitle() == getTitle()) {
         myTodos.push(todo);
       }
     }

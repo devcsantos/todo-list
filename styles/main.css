@@ -92,7 +92,16 @@ body {
   padding: 40px;
 }
 
+.project-container {
+  width: 100%;
+  padding: 40px;
+}
+
 #project-section h3 {
+  font-size: 100px;
+}
+
+.project-container h3 {
   font-size: 100px;
 }
 
@@ -100,7 +109,16 @@ body {
   font-size: 35px;
 }
 
+.project-container h1 {
+  font-size: 35px;
+}
+
 #todo-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-list {
   display: flex;
   flex-direction: column;
 }

@@ -2,7 +2,6 @@ import createProject from './projects';
 import createTodo from './todo';
 
 let projectsElement = document.getElementById('projects-bar');
-let todoListElement = document.getElementById('todo-list');
 
 let projects = [];
 let todos = [];
@@ -73,14 +72,33 @@ const createNewProjectButton = () => {
   projectsElement.appendChild(newProjectButton);
 }
 
+const initializeEventsForStaticElements = () => {
+  let todayButton = document.getElementById('today');
+  let allButton = document.getElementById('all');
+  let scheduledButton = document.getElementById('scheduled');
+
+  allButton.addEventListener('click', () => {
+    let sectionElement = document.getElementById('project-section');
+    sectionElement.innerHTML = ''; // reset for display
+
+    for(let project of projects) {
+      console.log(project.getTitle());
+      loadProject(project.getTitle());
+    }
+  });
+}
+
 export default function initializeDisplay() {
   createNewProjectButton(); // appends a new project button at the end
+  initializeEventsForStaticElements();
 }
 
 const handleProject = (e) => {
   switch(true) {
     case e.target.classList.contains('project-button'):
-      loadProject(e);
+      let sectionElement = document.getElementById('project-section');
+      sectionElement.innerHTML = ''; // reset for display
+      loadProject(e.target.id);
       break;
     case e.target.classList.contains('delete'):
       deleteProject(e);
@@ -97,21 +115,32 @@ const findProject = (title) => {
   );
 }
 
-const loadProject = (e) => {
-  let project = findProject(e.target.id);
+const loadProject = (projectName) => {
+  let project = findProject(projectName);
 
-  let projectTitle = document.getElementById('project-title');
-  let projectDescription = document.getElementById('project-desc');
-  projectTitle.innerText = project.getTitle();
-  projectDescription.innerText = project.getDescription();
+  let sectionElement = document.getElementById('project-section');
+  let projectContainer = document.createElement('div');
+  let projectTitleElement = document.createElement('h3');
+  let projectDescElement = document.createElement('h2');
+  let todoListElement = document.createElement('div');
 
-  clearTodos();
-  loadTodos(project);
+  projectContainer.classList.add('project-container');
+  projectTitleElement.innerText = project.getTitle();
+  projectDescElement.innerText = project.getDescription();
+  todoListElement.classList.add('todo-list');
+    
+  projectContainer.appendChild(projectTitleElement);
+  projectContainer.appendChild(projectDescElement);
+  projectContainer.appendChild(todoListElement);
+    
+  sectionElement.appendChild(projectContainer);
+
+  clearTodos(todoListElement);
+  loadTodos(project, todoListElement)
 }
 
 const editProject = (e) => {
   let projectButton = e.target.parentElement;
-  let project = findProject(e.target.parentElement.id);
 
   changeTextToEditable(projectButton);
 }
@@ -119,10 +148,14 @@ const editProject = (e) => {
 const saveTextEdit = (e) => {
   let inputBox = e.target;
   let button = e.target.parentElement;
+  let todoListElement = e.target.parentElement.parentElement;
+  let container = e.target.parentElement.parentElement.parentElement;
   let project;
   switch (true) {
     case button.classList.contains('project'):
       project = findProject(button.id);
+      let oldProjectName = project.getTitle();
+      linkTodosToNewProject()
       project.setTitle(e.target.value);
       button.id = project.getTitle();
       changeEditableToText(button, project.getTitle());
@@ -141,13 +174,12 @@ const saveTextEdit = (e) => {
       break;
     
     case button.classList.contains('new-todo'):
-      console.log(button);
-      let projectName = document.getElementById('project-title').innerText;
-      let todo = createTodo(inputBox.value, projectName);
+      project = findProject(container.firstChild.innerText);
+      let todo = createTodo(inputBox.value, project);
       todos.push(todo);
       todoListElement.appendChild(createTodoButton(todo.getTitle()));
       button.remove();
-      createNewTodoButton();
+      createNewTodoButton(todoListElement);
       break;
   }
 }
@@ -169,7 +201,7 @@ const createTodoButton = (id) => {
   return todoButton;
 }
 
-const createNewTodoButton = () => {
+const createNewTodoButton = (todoListElement) => {
   let newTodoButton = document.createElement('a');
   newTodoButton.setAttribute('id','new-todo-button');
   newTodoButton.innerText = 'Add new task';
@@ -183,13 +215,11 @@ const createNewTodoButton = () => {
   todoListElement.appendChild(newTodoButton);
 }
 
-const clearTodos = () => {
-  let todoListElement = document.getElementById('todo-list');
+const clearTodos = (todoListElement) => {
   todoListElement.innerHTML = ''; // clear all
 }
 
-const loadTodos = (project) => {
-  let todoListElement = document.getElementById('todo-list');
+const loadTodos = (project, todoListElement) => {
   let projectTodos = project.getMyTodos(todos);
   for(let todo of projectTodos) {
     let todoButton = createTodoButton(todo.getTitle());
@@ -197,7 +227,7 @@ const loadTodos = (project) => {
     todoListElement.appendChild(todoButton);
   }
 
-  createNewTodoButton();
+  createNewTodoButton(todoListElement);
 }
 
 const handleTodo = (e) => {
@@ -209,13 +239,17 @@ const handleTodo = (e) => {
       deleteTodo(e);
       break;
     case e.target.classList.contains('edit'):
-      //editTodo(e);
+      editTodo(e);
       break;
   }
 }
 
+const editTodo = (e) => {
+  console.log('EDITING START');
+}
+
 const deleteTodo = (e) => {
-  let projectName = document.getElementById('project-title').innerText;
+  let projectName = e.target.parentElement.parentElement.parentElement.firstElementChild.innerText;
   let todoTitle = e.target.parentElement.id;
   todos.splice(findTodoIndex(todoTitle, projectName), 1);
   e.target.parentElement.remove();
@@ -229,14 +263,20 @@ const findTodoIndex = (todoTitle, projectName) => {
 
 const findTodo = (todoTitle, projectName) => {
   return todos.find(
-    (todo) => { return todo.getTitle() == todoTitle && todo.getProject() == projectName; }
+    (todo) => { 
+      return todo.getTitle() == todoTitle && todo.getProject().getTitle() == projectName; 
+    }
   )
 }
 
 const toggleTodo = (e) => {
   let todoTitle = e.target.id;
-  let projectName = document.getElementById('project-title').innerText;
+  let projectName = e.target.parentElement.parentElement.firstElementChild.innerText;
   let todo = findTodo(todoTitle, projectName);
 
   todo.toggleTask() ? e.target.classList.add('done') : e.target.classList.remove('done');
+}
+
+const loadAllTodos = (e) => {
+
 }
