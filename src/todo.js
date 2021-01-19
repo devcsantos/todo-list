@@ -18,6 +18,7 @@ const todoFactory = (title,
   const setDueDate = (dueDate) => _dueDate = dueDate;
   const setPriority = (priority) => _priority = priority;
   const setProject = (project) => _project = project;
+  const isDone = () => _taskDone;
 
   const toggleTask = () => {
     _taskDone = !_taskDone;
@@ -34,6 +35,7 @@ const todoFactory = (title,
     setDueDate,
     setPriority,
     setProject,
+    isDone,
     toggleTask
   }
 }

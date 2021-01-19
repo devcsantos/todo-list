@@ -192,7 +192,9 @@ const loadTodos = (project) => {
   let todoListElement = document.getElementById('todo-list');
   let projectTodos = project.getMyTodos(todos);
   for(let todo of projectTodos) {
-    todoListElement.appendChild(createTodoButton(todo.getTitle()));
+    let todoButton = createTodoButton(todo.getTitle());
+    if(todo.isDone()) todoButton.classList.add('done');
+    todoListElement.appendChild(todoButton);
   }
 
   createNewTodoButton();
