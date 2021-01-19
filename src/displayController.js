@@ -152,30 +152,47 @@ const saveTextEdit = (e) => {
   let container = todoListElement.parentElement;
   let project;
   let todo;
+
   switch (true) {
     case button.classList.contains('project'):
       project = findProject(button.id);
       let oldProjectName = project.getTitle();
-      project.setTitle(inputBox.value);
-
-      linkTodosToNewProject(oldProjectName, project)
-      button.id = project.getTitle();
+      let dummyProject = createProject(inputBox.value);
+      if(isValidProject(dummyProject)){
+        project.setTitle(inputBox.value);
+        linkTodosToNewProject(oldProjectName, project)
+        button.id = project.getTitle();
+      } else {
+        alert(`Invalid project name. Project already exists.`);
+      }
       changeEditableToText(button, project.getTitle());
       break;
     
     case button.classList.contains('todo'):
       project = findProject(container.firstChild.innerText);
       todo = findTodo(button.id, project.getTitle());
-      todo.setTitle(inputBox.value);
-      button.id = todo.getTitle();
+
+      let dummyTodo = createTodo(inputBox.value, project); // create dummy to validate against
+      if(isValidInput(dummyTodo)) {
+        todo.setTitle(inputBox.value);
+        button.id = todo.getTitle();
+      } else {
+        alert(`Invalid task name. Task name already exists under project.`);
+      }
       changeEditableToText(button, todo.getTitle());
       break;
     
     case button.classList.contains('new-project'):
       changeEditableToText(button, inputBox.value);
       project = createProject(inputBox.value);
-      projects.push(project);
-      projectsElement.appendChild(createProjectButton(project.getTitle()));
+
+      if(isValidInput(project, 'project')) { // validation
+        projects.push(project);
+        projectsElement.appendChild(createProjectButton(project.getTitle()));
+      } else {
+        alert(`Invalid project name. Project already exists.`);
+      }
+
       button.remove(); // destroy old new project button
       createNewProjectButton(); // create new one
       break;
@@ -183,12 +200,34 @@ const saveTextEdit = (e) => {
     case button.classList.contains('new-todo'):
       project = findProject(container.firstChild.innerText);
       todo = createTodo(inputBox.value, project);
-      todos.push(todo);
-      todoListElement.appendChild(createTodoButton(todo.getTitle()));
+
+      if(isValidInput(todo, 'todo')) {
+        todos.push(todo);
+        todoListElement.appendChild(createTodoButton(todo.getTitle()));
+      } else {
+        alert(`Invalid task name. Task name already exists under project.`);
+      }
       button.remove();
       createNewTodoButton(todoListElement);
       break;
   }
+}
+
+const isValidInput = (input, type) => {
+  switch (type) {
+    case 'todo':
+      return isValidTodo(input);
+    case 'project':
+      return isValidProject(input);
+  }
+}
+
+const isValidTodo = (todo) => {
+  return findTodo(todo.getTitle(), todo.getProject().getTitle()) == undefined ? true : false;
+}
+
+const isValidProject = (project) => {
+  return findProject(project.getTitle()) == undefined ? true : false;
 }
 
 const deleteProject = (e) => {
