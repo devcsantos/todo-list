@@ -111,7 +111,7 @@ const handleProject = (e) => {
 
 const findProject = (title) => {
   return projects.find(
-      (project) => { return project.getTitle() == title }
+      (project) => { return project.getTitle() == title; }
   );
 }
 
@@ -186,7 +186,7 @@ const saveTextEdit = (e) => {
 
 const deleteProject = (e) => {
   let project = findProject(e.target.parentElement.id);
-  projects.splice(projects.indexOf(findProject(e.target.parentElement.id),1));
+  projects.splice(projects.indexOf(findProject(e.target.parentElement.id)),1);
   disposeTodos(project);
   e.target.parentElement.remove();
 }
