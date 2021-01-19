@@ -5,6 +5,7 @@ let projectsElement = document.getElementById('projects-bar');
 let todoListElement = document.getElementById('todo-list');
 
 let projects = [];
+let todos = [];
 
 const createProjectButton = (id) => {
   let projectButton = document.createElement('a');
@@ -143,8 +144,7 @@ const saveTextEdit = (e) => {
       console.log(button);
       let projectName = document.getElementById('project-title').innerText;
       let todo = createTodo(inputBox.value, projectName);
-      project = findProject(projectName);
-      project.addTodo(todo);
+      todos.push(todo);
       todoListElement.appendChild(createTodoButton(todo.getTitle()));
       button.remove();
       createNewTodoButton();
@@ -190,8 +190,8 @@ const clearTodos = () => {
 
 const loadTodos = (project) => {
   let todoListElement = document.getElementById('todo-list');
-  let todos = project.getTodos();
-  for(let todo of todos) {
+  let projectTodos = project.getMyTodos(todos);
+  for(let todo of projectTodos) {
     todoListElement.appendChild(createTodoButton(todo.getTitle()));
   }
 
@@ -201,7 +201,7 @@ const loadTodos = (project) => {
 const handleTodo = (e) => {
   switch(true) {
     case e.target.classList.contains('todo-button'):
-      //loadTodo(e);
+      toggleTask(e);
       break;
     case e.target.classList.contains('delete'):
       deleteTodo(e);
@@ -213,7 +213,18 @@ const handleTodo = (e) => {
 }
 
 const deleteTodo = (e) => {
-  let project = findProject(document.getElementById('project-title').innerText);
-  project.removeTodo(e.target.parentElement.id);
+  let projectName = document.getElementById('project-title').innerText;
+  let todoTitle = e.target.parentElement.id;
+  todos.splice(findTodoIndex(todoTitle, projectName), 1);
   e.target.parentElement.remove();
+}
+
+const findTodoIndex = (todoTitle, projectName) => {
+  return todos.findIndex(
+    (todo) => { return todo.getTitle() == todoTitle && todo.getProject() == projectName; }
+  )
+}
+
+const toggleTask = (e) => {
+
 }

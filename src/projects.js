@@ -1,5 +1,4 @@
 const projectFactory = (title, description = 'New description') => {
-  let _todos = [];
   
   let _title = title;
   let _desc = description;
@@ -10,29 +9,24 @@ const projectFactory = (title, description = 'New description') => {
   const setTitle = (title) => _title = title;
   const setDescription = (description) => _desc = description;
 
-  const addTodo = (todo) => {
-    _todos.push(todo);
-  }
+  const getMyTodos = (todosArray) => {
+    let myTodos = [];
 
-  const removeTodo = (todoTitle) => {
-    _todos.splice(_findTodoIndex(todoTitle),1);
-  }
+    for(let todo of todosArray) {
+      if(todo.getProject() == getTitle()) {
+        myTodos.push(todo);
+      }
+    }
 
-  const _findTodoIndex = (todoTitle) => {
-    return _todos.findIndex(
-      (todo) => { return todo.getTitle() == todoTitle }
-  );
+    return myTodos;
   }
-  const getTodos = () => _todos;
 
   return{
     getTitle,
     getDescription,
     setTitle,
     setDescription,
-    addTodo,
-    removeTodo,
-    getTodos
+    getMyTodos
   }
 }
 
