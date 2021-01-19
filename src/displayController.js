@@ -118,8 +118,9 @@ const loadProject = (e) => {
   let projectDescription = document.getElementById('project-desc');
   projectTitle.innerText = project.getTitle();
   projectDescription.innerText = project.getDescription();
-    
-  createNewTodoButton();
+  
+  clearTodos();
+  loadTodos(project);
 }
 
 const editProject = (e) => {
@@ -187,7 +188,6 @@ const createNewTodoButton = () => {
     let todo = createTodo(details.id, details.projectName);
     let project = projects[findProjectIndex(details.projectName)];
     project.addTodo(todo);
-    console.log(project.todos);
     todoListElement.appendChild(createTodoButton(todo.getTitle())); //placeholder
     newTodoButton.remove();
     createNewTodoButton();
@@ -212,6 +212,17 @@ const createNewTodoButton = () => {
   todoListElement.appendChild(newTodoButton);
 }
 
-const loadTodos = (project) => {
+const clearTodos = () => {
+  let todoListElement = document.getElementById('todo-list');
+  todoListElement.innerHTML = ''; // clear all
+}
 
+const loadTodos = (project) => {
+  let todoListElement = document.getElementById('todo-list');
+  let todos = project.getTodos();
+  for(let todo of todos) {
+    todoListElement.appendChild(createTodoButton(todo.getTitle()));
+  }
+
+  createNewTodoButton();
 }

@@ -11,11 +11,11 @@ const projectFactory = (title, description = undefined) => {
   const setDescription = (description) => _desc = description;
 
   const addTodo = (todo) => {
-    todos.push(todo);
+    _todos.push(todo);
   }
 
   const removeTodo = (todo) => {
-    todos.splice(todos.indexOf(todo),1);
+    _todos.splice(_todos.indexOf(todo),1);
   }
 
   const getTodos = () => _todos;
