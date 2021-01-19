@@ -141,6 +141,18 @@ const saveTextEdit = (e) => {
       projectsElement.appendChild(createProjectButton(project.getTitle()));
       button.remove(); // destroy old new project button
       createNewProjectButton(); // create new one
+      break;
+    
+    case button.classList.contains('new-todo'):
+      console.log(button);
+      let projectName = document.getElementById('project-title').innerText;
+      let todo = createTodo(inputBox.value, projectName);
+      project = projects[findProjectIndex(projectName)];
+      project.addTodo(todo);
+      todoListElement.appendChild(createTodoButton(todo.getTitle()));
+      button.remove();
+      createNewTodoButton();
+      break;
   }
 }
 
@@ -165,41 +177,11 @@ const createNewTodoButton = () => {
   newTodoButton.setAttribute('id','new-todo-button');
   newTodoButton.innerText = 'Add new task';
   newTodoButton.classList.add('todo-button');
+  newTodoButton.classList.add('new-todo');
 
   newTodoButton.addEventListener('click',(e) => {
-    let textEdit = document.createElement('input');
-    textEdit.setAttribute('type','text');
-    textEdit.setAttribute('placeholder', newTodoButton.innerText);
-    newTodoButton.innerText = '';
-    newTodoButton.appendChild(textEdit);
-    textEdit.focus();
+    changeTextToEditable(newTodoButton, e);
   }, true);
-  
-  newTodoButton.addEventListener('addTodo', (e) => {
-    let details = e.detail;
-    let todo = createTodo(details.id, details.projectName);
-    let project = projects[findProjectIndex(details.projectName)];
-    project.addTodo(todo);
-    todoListElement.appendChild(createTodoButton(todo.getTitle())); //placeholder
-    newTodoButton.remove();
-    createNewTodoButton();
-  })
-  
-  newTodoButton.addEventListener('blur', (e) => {
-    let projectTitle = document.getElementById('project-title').innerText;
-    let textEdit = newTodoButton.firstChild;
-    newTodoButton.innerText = textEdit.value;
-    textEdit.remove();
-    newTodoButton.dispatchEvent(new CustomEvent(
-      'addTodo',
-      {
-        detail: {
-          id: newTodoButton.innerText,
-          projectName: projectTitle
-        }
-      }
-      ));
-    }, true);
 
   todoListElement.appendChild(newTodoButton);
 }
