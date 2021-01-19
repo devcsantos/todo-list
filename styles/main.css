@@ -171,7 +171,7 @@ svg {
 
 .svg-icon {
   width: 1.5em;
-  display: inline-block;
+  display: none;
 }
 
 .delete {
@@ -199,4 +199,8 @@ svg:hover path{
 .svg-icon circle {
   stroke: #4691f6;
   stroke-width: 1;
+}
+
+.project-button:hover svg {
+  display: inline-block;
 }

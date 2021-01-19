@@ -1,4 +1,4 @@
-const projectFactory = (title, description = undefined) => {
+const projectFactory = (title, description = 'New description') => {
   let _todos = [];
   
   let _title = title;

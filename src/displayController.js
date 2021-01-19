@@ -18,14 +18,26 @@ const createProjectButton = (id) => {
   return projectButton;
 }
 
-const changeTextToEditable = (parent) => {
+const changeTextToEditable = (parent, e = null) => {
   let textEdit = document.createElement('input');
   textEdit.setAttribute('type','text');
   textEdit.setAttribute('placeholder', parent.innerText);
 
-  textEdit.addEventListener('blur', saveTextEdit);
+  textEdit.addEventListener('blur', saveTextEdit, true);
+  textEdit.addEventListener('keyup', (e) => {
+    if(e.key === 'Enter') {
+      textEdit.blur();
+    }
+  })
   parent.replaceChild(textEdit, parent.firstChild);
   textEdit.focus();
+}
+
+const changeEditableToText = (parent, text) => {
+  parent.replaceChild(
+    document.createTextNode(text),
+    parent.firstChild
+  );
 }
 
 const insertDeleteButtonTo = (button) => {
@@ -51,38 +63,13 @@ const createNewProjectButton = () => {
   newProjectButton.setAttribute('id','new-project-button');
   newProjectButton.innerText = 'Add new project';
   newProjectButton.classList.add('project-button');
+  newProjectButton.classList.add('new-project');
   
   newProjectButton.addEventListener('click',(e) => {
-    let textEdit = document.createElement('input');
-    textEdit.setAttribute('type','text');
-    textEdit.setAttribute('placeholder', newProjectButton.innerText);
-    newProjectButton.replaceChild(textEdit, newProjectButton.firstChild);
-    textEdit.focus();
+    changeTextToEditable(newProjectButton, e);
   }, true);
-  
-  newProjectButton.addEventListener('addProject', (e) => {
-    let project = createProject(e.detail.id, 'New project description');
-    projects.push(project);
-    projectsElement.appendChild(createProjectButton(project.getTitle()));
-    newProjectButton.remove();
-    createNewProjectButton();
-  }, true)
-  
-  newProjectButton.addEventListener('blur', (e) => {
-    let textEdit = newProjectButton.firstChild;
-    newProjectButton.innerText = textEdit.value;
-    textEdit.remove();
-    newProjectButton.dispatchEvent(new CustomEvent(
-      'addProject',
-      {
-        detail: {
-          id: newProjectButton.innerText
-        }
-      }
-      ));
-    }, true);
     
-    projectsElement.appendChild(newProjectButton);
+  projectsElement.appendChild(newProjectButton);
 }
 
 export default function initializeDisplay() {
@@ -118,7 +105,7 @@ const loadProject = (e) => {
   let projectDescription = document.getElementById('project-desc');
   projectTitle.innerText = project.getTitle();
   projectDescription.innerText = project.getDescription();
-  
+
   clearTodos();
   loadTodos(project);
 }
@@ -133,22 +120,27 @@ const editProject = (e) => {
 }
 
 const saveTextEdit = (e) => {
+  let inputBox = e.target;
   let button = e.target.parentElement;
+  let project;
   switch (true) {
     case button.classList.contains('project'):
-    let project = projects[
-      findProjectIndex(button.id)
-    ];
-    project.setTitle(e.target.value);
-    button.id = project.getTitle();
-    button.replaceChild(
-      document.createTextNode(project.getTitle()),
-      button.firstChild
-      );
-      
+      project = projects[findProjectIndex(button.id)];
+      project.setTitle(e.target.value);
+      button.id = project.getTitle();
+      changeEditableToText(button, project.getTitle());
       break;
-      case button.classList.contains('todo'):
+    
+    case button.classList.contains('todo'):
       break;
+    
+    case button.classList.contains('new-project'):
+      changeEditableToText(button, inputBox.value);
+      project = createProject(inputBox.value);
+      projects.push(project);
+      projectsElement.appendChild(createProjectButton(project.getTitle()));
+      button.remove(); // destroy old new project button
+      createNewProjectButton(); // create new one
   }
 }
 
