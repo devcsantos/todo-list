@@ -21,6 +21,8 @@ const todoFactory = (title,
 
   const toggleTask = () => {
     _taskDone = !_taskDone;
+
+    return _taskDone;
   }
 
   return {
@@ -31,7 +33,8 @@ const todoFactory = (title,
     setTitle,
     setDueDate,
     setPriority,
-    setProject
+    setProject,
+    toggleTask
   }
 }
 

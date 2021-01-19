@@ -201,7 +201,7 @@ const loadTodos = (project) => {
 const handleTodo = (e) => {
   switch(true) {
     case e.target.classList.contains('todo-button'):
-      toggleTask(e);
+      toggleTodo(e);
       break;
     case e.target.classList.contains('delete'):
       deleteTodo(e);
@@ -225,6 +225,16 @@ const findTodoIndex = (todoTitle, projectName) => {
   )
 }
 
-const toggleTask = (e) => {
+const findTodo = (todoTitle, projectName) => {
+  return todos.find(
+    (todo) => { return todo.getTitle() == todoTitle && todo.getProject() == projectName; }
+  )
+}
 
+const toggleTodo = (e) => {
+  let todoTitle = e.target.id;
+  let projectName = document.getElementById('project-title').innerText;
+  let todo = findTodo(todoTitle, projectName);
+
+  todo.toggleTask() ? e.target.classList.add('done') : e.target.classList.remove('done');
 }
