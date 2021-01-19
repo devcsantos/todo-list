@@ -155,8 +155,8 @@ const saveTextEdit = (e) => {
     case button.classList.contains('project'):
       project = findProject(button.id);
       let oldProjectName = project.getTitle();
-      linkTodosToNewProject()
       project.setTitle(e.target.value);
+      linkTodosToNewProject(oldProjectName, project)
       button.id = project.getTitle();
       changeEditableToText(button, project.getTitle());
       break;
@@ -279,4 +279,12 @@ const toggleTodo = (e) => {
 
 const loadAllTodos = (e) => {
 
+}
+
+const linkTodosToNewProject = (oldProjectName, project) => {
+  for(let todo of todos) {
+    if(todo.getProject().getTitle() == oldProjectName) {
+      todo.setProject(project);
+    }
+  }
 }
