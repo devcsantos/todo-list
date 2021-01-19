@@ -185,7 +185,9 @@ const saveTextEdit = (e) => {
 }
 
 const deleteProject = (e) => {
+  let project = findProject(e.target.parentElement.id);
   projects.splice(projects.indexOf(findProject(e.target.parentElement.id),1));
+  disposeTodos(project);
   e.target.parentElement.remove();
 }
 
@@ -277,14 +279,19 @@ const toggleTodo = (e) => {
   todo.toggleTask() ? e.target.classList.add('done') : e.target.classList.remove('done');
 }
 
-const loadAllTodos = (e) => {
-
-}
-
 const linkTodosToNewProject = (oldProjectName, project) => {
   for(let todo of todos) {
     if(todo.getProject().getTitle() == oldProjectName) {
       todo.setProject(project);
+    }
+  }
+}
+
+const disposeTodos = (project) => {
+  let todosCount = todos.length;
+  while(todosCount--) {
+    if(todos[todosCount].getProject().getTitle() == project.getTitle()) {
+      todos.splice(todosCount, 1);
     }
   }
 }
