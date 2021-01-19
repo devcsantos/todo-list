@@ -12,9 +12,9 @@ const createProjectButton = (id) => {
   projectButton.innerText = id;
   projectButton.classList.add('project-button');
   projectButton.classList.add('project');
-  insertDeleteButtonTo(projectButton);
   insertEditButtonTo(projectButton);
-  projectButton.addEventListener('click', (handleProject), true);
+  insertDeleteButtonTo(projectButton);
+  projectButton.addEventListener('click', handleProject, true);
   return projectButton;
 }
 
@@ -90,16 +90,14 @@ const handleProject = (e) => {
   }
 }
 
-const findProjectIndex = (title) => {
-  return projects.findIndex(
+const findProject = (title) => {
+  return projects.find(
       (project) => { return project.getTitle() == title }
   );
 }
 
 const loadProject = (e) => {
-  let project = projects[
-    findProjectIndex(e.target.id)
-  ];
+  let project = findProject(e.target.id);
 
   let projectTitle = document.getElementById('project-title');
   let projectDescription = document.getElementById('project-desc');
@@ -112,9 +110,7 @@ const loadProject = (e) => {
 
 const editProject = (e) => {
   let projectButton = e.target.parentElement;
-  let project = projects[
-    findProjectIndex(e.target.parentElement.id)
-  ];
+  let project = findProject(e.target.parentElement.id);
 
   changeTextToEditable(projectButton);
 }
@@ -125,7 +121,7 @@ const saveTextEdit = (e) => {
   let project;
   switch (true) {
     case button.classList.contains('project'):
-      project = projects[findProjectIndex(button.id)];
+      project = findProject(button.id);
       project.setTitle(e.target.value);
       button.id = project.getTitle();
       changeEditableToText(button, project.getTitle());
@@ -147,7 +143,7 @@ const saveTextEdit = (e) => {
       console.log(button);
       let projectName = document.getElementById('project-title').innerText;
       let todo = createTodo(inputBox.value, projectName);
-      project = projects[findProjectIndex(projectName)];
+      project = findProject(projectName);
       project.addTodo(todo);
       todoListElement.appendChild(createTodoButton(todo.getTitle()));
       button.remove();
@@ -157,7 +153,7 @@ const saveTextEdit = (e) => {
 }
 
 const deleteProject = (e) => {
-  projects.splice(findProjectIndex(e.target.parentElement.id),1);
+  projects.splice(projects.indexOf(findProject(e.target.parentElement.id),1));
   e.target.parentElement.remove();
 }
 
@@ -167,8 +163,9 @@ const createTodoButton = (id) => {
   todoButton.innerText = id;
   todoButton.classList.add('todo-button');
   todoButton.classList.add('todo');
-  
-
+  insertEditButtonTo(todoButton);
+  insertDeleteButtonTo(todoButton);
+  todoButton.addEventListener('click', handleTodo, true);
   return todoButton;
 }
 
@@ -199,4 +196,24 @@ const loadTodos = (project) => {
   }
 
   createNewTodoButton();
+}
+
+const handleTodo = (e) => {
+  switch(true) {
+    case e.target.classList.contains('todo-button'):
+      //loadTodo(e);
+      break;
+    case e.target.classList.contains('delete'):
+      deleteTodo(e);
+      break;
+    case e.target.classList.contains('edit'):
+      //editTodo(e);
+      break;
+  }
+}
+
+const deleteTodo = (e) => {
+  let project = findProject(document.getElementById('project-title').innerText);
+  project.removeTodo(e.target.parentElement.id);
+  e.target.parentElement.remove();
 }

@@ -107,6 +107,8 @@ body {
 }
 
 .todo-button {
+  display: flex;
+  flex-direction: row;
   background-color: var(--todo-button-color);
   color: white;
   border: 2px solid black;
@@ -114,6 +116,7 @@ body {
   transition: background-color 0.4s ease-out;
   margin: 5px;
   padding: 5px;
+  height: 40px;
 }
 
 .todo-button:hover {
@@ -174,7 +177,7 @@ svg {
   display: none;
 }
 
-.delete {
+.edit {
   margin-left: auto;
 }
 
@@ -203,4 +206,24 @@ svg:hover path{
 
 .project-button:hover svg {
   display: inline-block;
+}
+
+.todo-button:hover svg {
+  display: inline-block;
+}
+
+.todo-button svg{
+  width: 3em;
+  height: 100%;
+}
+
+.todo-button .svg-icon path {
+  fill: white;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.todo-button svg:hover path{
+  fill: #2375FF;
 }

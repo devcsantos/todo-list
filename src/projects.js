@@ -14,10 +14,15 @@ const projectFactory = (title, description = 'New description') => {
     _todos.push(todo);
   }
 
-  const removeTodo = (todo) => {
-    _todos.splice(_todos.indexOf(todo),1);
+  const removeTodo = (todoTitle) => {
+    _todos.splice(_findTodoIndex(todoTitle),1);
   }
 
+  const _findTodoIndex = (todoTitle) => {
+    return _todos.findIndex(
+      (todo) => { return todo.getTitle() == todoTitle }
+  );
+  }
   const getTodos = () => _todos;
 
   return{
