@@ -1,5 +1,5 @@
-const projectFactory = (title, description) => {
-  let todos = [];
+const projectFactory = (title, description = undefined) => {
+  let _todos = [];
   
   let _title = title;
   let _desc = description;
@@ -18,13 +18,16 @@ const projectFactory = (title, description) => {
     todos.splice(todos.indexOf(todo),1);
   }
 
+  const getTodos = () => _todos;
+
   return{
     getTitle,
     getDescription,
     setTitle,
     setDescription,
     addTodo,
-    removeTodo
+    removeTodo,
+    getTodos
   }
 }
 

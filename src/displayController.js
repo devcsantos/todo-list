@@ -183,13 +183,18 @@ const createNewTodoButton = () => {
   }, true);
   
   newTodoButton.addEventListener('addTodo', (e) => {
-    let todo = createTodo('test','test','test','test','test'); //placeholder implement form for CRUD todo items
+    let details = e.detail;
+    let todo = createTodo(details.id, details.projectName);
+    let project = projects[findProjectIndex(details.projectName)];
+    project.addTodo(todo);
+    console.log(project.todos);
     todoListElement.appendChild(createTodoButton(todo.getTitle())); //placeholder
     newTodoButton.remove();
     createNewTodoButton();
   })
   
   newTodoButton.addEventListener('blur', (e) => {
+    let projectTitle = document.getElementById('project-title').innerText;
     let textEdit = newTodoButton.firstChild;
     newTodoButton.innerText = textEdit.value;
     textEdit.remove();
@@ -197,7 +202,8 @@ const createNewTodoButton = () => {
       'addTodo',
       {
         detail: {
-          id: newTodoButton.innerText
+          id: newTodoButton.innerText,
+          projectName: projectTitle
         }
       }
       ));

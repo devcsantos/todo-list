@@ -1,4 +1,9 @@
-const todoFactory = (title, description, dueDate, priority, project) => {
+const todoFactory = (title, 
+  project,
+  description = undefined, 
+  dueDate = undefined, 
+  priority = undefined) => {
+
   let _title = title;
   let _desc = description;
   let _dueDate = dueDate;
