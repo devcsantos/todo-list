@@ -147,21 +147,28 @@ const editProject = (e) => {
 
 const saveTextEdit = (e) => {
   let inputBox = e.target;
-  let button = e.target.parentElement;
-  let todoListElement = e.target.parentElement.parentElement;
-  let container = e.target.parentElement.parentElement.parentElement;
+  let button = inputBox.parentElement;
+  let todoListElement = button.parentElement;
+  let container = todoListElement.parentElement;
   let project;
+  let todo;
   switch (true) {
     case button.classList.contains('project'):
       project = findProject(button.id);
       let oldProjectName = project.getTitle();
-      project.setTitle(e.target.value);
+      project.setTitle(inputBox.value);
+
       linkTodosToNewProject(oldProjectName, project)
       button.id = project.getTitle();
       changeEditableToText(button, project.getTitle());
       break;
     
     case button.classList.contains('todo'):
+      project = findProject(container.firstChild.innerText);
+      todo = findTodo(button.id, project.getTitle());
+      todo.setTitle(inputBox.value);
+      button.id = todo.getTitle();
+      changeEditableToText(button, todo.getTitle());
       break;
     
     case button.classList.contains('new-project'):
@@ -175,7 +182,7 @@ const saveTextEdit = (e) => {
     
     case button.classList.contains('new-todo'):
       project = findProject(container.firstChild.innerText);
-      let todo = createTodo(inputBox.value, project);
+      todo = createTodo(inputBox.value, project);
       todos.push(todo);
       todoListElement.appendChild(createTodoButton(todo.getTitle()));
       button.remove();
@@ -247,7 +254,7 @@ const handleTodo = (e) => {
 }
 
 const editTodo = (e) => {
-  console.log('EDITING START');
+  changeTextToEditable(e.target.parentElement);
 }
 
 const deleteTodo = (e) => {
